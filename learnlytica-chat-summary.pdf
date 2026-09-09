@@ -1,0 +1,56 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2331 >>
+stream
+BT /F1 12 Tf 1 0 0 1 50 800 Tm (Learnlytica Chat Summary) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 782 Tm (Generated on: 2026-09-09) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 764 Tm () Tj ET
+BT /F1 12 Tf 1 0 0 1 50 746 Tm (Session highlights:) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 728 Tm (- Implemented PrismaService & PrismaModule connecting NestJS with Prisma ORM.) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 710 Tm (- Configured CORS, ValidationPipe, and global "/api" prefix on the backend.) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 692 Tm (- Enhanced Students, ActivityLog, Readiness, and Dashboard modules with persistence & graceful fallback.) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 674 Tm (- Added ProblemsModule with problem bank, solution submission evaluation, and activity fact generation.) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 656 Tm (- Created database seeder \(prisma/seed.ts\) and verified all API endpoints live.) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 638 Tm (- Diagnosed and resolved Google OAuth Error 400 \(redirect_uri_mismatch\).) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 620 Tm () Tj ET
+BT /F1 12 Tf 1 0 0 1 50 602 Tm (Key notes & Solutions:) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 584 Tm (- Backend running live at http://localhost:3000/api with full CORS and DTO validation.) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 566 Tm (- Event loop completed: problem submissions emit immutable ActivityFacts and SkillEvidence.) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 548 Tm (- Google OAuth Error 400: registered authorized redirect URIs in Google Cloud Console.) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 530 Tm () Tj ET
+BT /F1 12 Tf 1 0 0 1 50 512 Tm (Project configuration:) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 494 Tm (- Monorepo \(pnpm\): shared, backend \(NestJS + Prisma Client v6\), frontend \(Vite + React + Tailwind\)) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 476 Tm (- Core model: immutable activity facts -> skill evidence -> multi-dimensional readiness projections) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 458 Tm () Tj ET
+BT /F1 12 Tf 1 0 0 1 50 440 Tm (Files involved:) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 422 Tm (- backend/src/prisma/prisma.service.ts & prisma.module.ts) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 404 Tm (- backend/src/modules/problems/* & backend/src/main.ts) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 386 Tm (- backend/src/modules/students/*, activity-logs/*, readiness/*, dashboard/*) Tj ET
+BT /F1 12 Tf 1 0 0 1 50 368 Tm (- backend/prisma/seed.ts & schema.prisma) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000002624 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2694
+%%EOF

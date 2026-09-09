@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StudentYear {
+  YEAR_1
+  YEAR_2
+  YEAR_3
+  YEAR_4
+}
+
+enum RoleArchetype {
+  SOFTWARE_ENGINEER
+  DATA_ENGINEER
+  PRODUCT_ENGINEER
+  QA_ENGINEER
+}
+
+enum ActivityType {
+  PRACTICE
+  PROJECT
+  ASSESSMENT
+  LEARNING
+  COMPETITION
+}
+
+enum SourceType {
+  ASSIGNMENT
+  PROJECT
+  PRACTICE
+  ASSESSMENT
+  EXTERNALS
+}
+
+model College {
+  id        String   @id @default(cuid())
+  name      String
+  code      String   @unique
+  students  Student[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Student {
+  id              String          @id @default(cuid())
+  name            String
+  email           String          @unique
+  collegeId       String?
+  college         College?        @relation(fields: [collegeId], references: [id])
+  year            StudentYear
+  interests       String[]
+  goals           String[]
+  targetRoles     RoleArchetype[]
+  activityFacts   ActivityFact[]
+  skillEvidences  SkillEvidence[]
+  readinessScores ReadinessScore[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model ActivityFact {
+  id         String       @id @default(cuid())
+  studentId  String
+  student    Student      @relation(fields: [studentId], references: [id])
+  type       ActivityType
+  skill      String
+  title      String
+  points     Int          @default(0)
+  createdAt  DateTime     @default(now())
+  evidence   SkillEvidence[]
+}
+
+model SkillEvidence {
+  id          String      @id @default(cuid())
+  studentId   String
+  student     Student     @relation(fields: [studentId], references: [id])
+  factId      String
+  fact        ActivityFact @relation(fields: [factId], references: [id])
+  skillId     String
+  confidence  Float
+  source      SourceType
+  recordedAt  DateTime    @default(now())
+}
+
+model ReadinessScore {
+  id                String          @id @default(cuid())
+  studentId         String
+  student           Student         @relation(fields: [studentId], references: [id])
+  role              RoleArchetype
+  companyArchetype  String
+  score             Float
+  evidenceIds      String[]
+  generatedAt       DateTime        @default(now())
+}

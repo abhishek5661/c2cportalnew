@@ -18,6 +18,7 @@ import {
   UserCheck,
   Bell,
   Settings,
+  Brain,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -74,7 +75,7 @@ export const navGroups: NavGroup[] = [
       {
         id: 'cs-fundamentals',
         label: 'CS Fundamentals',
-        to: '/master',
+        to: '/cs-fundamentals',
         icon: Layers,
         iconColor: 'text-orange-600',
         iconBg: 'bg-orange-50 text-orange-600',
@@ -82,10 +83,26 @@ export const navGroups: NavGroup[] = [
       {
         id: 'frontier-tech',
         label: 'Frontier Tech',
-        to: '/master',
+        to: '/frontier-tech',
         icon: Sparkles,
         iconColor: 'text-purple-600',
         iconBg: 'bg-purple-50 text-purple-600',
+      },
+      {
+        id: 'aptitude-track',
+        label: 'Aptitude',
+        to: '/aptitude',
+        icon: BarChart3,
+        iconColor: 'text-amber-600',
+        iconBg: 'bg-amber-50 text-amber-600',
+      },
+      {
+        id: 'reasoning-track',
+        label: 'Reasoning',
+        to: '/reasoning',
+        icon: Brain,
+        iconColor: 'text-emerald-600',
+        iconBg: 'bg-emerald-50 text-emerald-600',
       },
     ],
   },

@@ -1,169 +1,64 @@
-# C2C Portal
+# Learnlytica
 
-A modern student growth and career platform built with React, TypeScript, Vite, and Tailwind CSS. The app helps students onboard, track their learning progress, practice technical skills, explore career pathways, manage connected profiles, and stay organized with notifications and calendar planning.
+A student industry-readiness operating system for engineering colleges. Learnlytica is
+not an LMS: every screen exists to drive an action, capture evidence, or trigger an
+intervention. It continuously turns a first-year student into an industry-ready engineer and
+gives colleges an evidence-based view of cohort readiness.
 
-## Overview
+The product loop:
 
-C2C Portal is designed as a student-focused learning dashboard that combines:
+> Learn → Solve → Build → Compete → Present → Assess → Intervene → Improve → Evidence → Company-Ready
 
-- onboarding and profile setup
-- personalized dashboard and progress tracking
-- learning path exploration
-- DSA and aptitude practice flows
-- project-building and contest participation
-- mentorship, analytics, and career preparation
-- notifications and schedule planning
-- connected GitHub, LinkedIn, and social account setup
+## Architecture at a glance
 
-## Features
+Everything derives from an append-only activity log (the source of truth). Skill mastery,
+evidence, and readiness are projections recomputed from that log by a versioned readiness
+model. We never store a readiness score as an opaque, un-explainable number.
 
-### Student onboarding
-- guided onboarding flow
-- year, interests, goals, preferences, and skill selection
-- account connection setup for GitHub, LinkedIn, and other platforms
-- profile completion state
-
-### Learning experience
-- custom dashboard with semester-based insights
-- streak/XP/progress tracking
-- learning paths and lesson modules
-- practice pages with problem navigation
-- project and competition modules
-
-### Career readiness
-- career growth and interview preparation journeys
-- resume score and suggestions
-- company-readiness and professional development views
-
-### Productivity tools
-- notification center overview
-- calendar and scheduled work planning
-- settings page for profile and connected accounts
-
-## Tech Stack
-
-- React 18
-- TypeScript
-- Vite
-- Tailwind CSS
-- React Router DOM
-- Recharts
-- Lucide React
-
-## Project Structure
-
-```text
-src/
-  app/
-    router.tsx
-  components/
-    layout/
-    navigation/
-    ui/
-  data/
-    mock.ts
-  features/
-    analytics/
-    auth/
-    build/
-    career/
-    compete/
-    dashboard/
-    help/
-    journey/
-    learning-paths/
-    mentor/
-    notifications/
-    onboarding/
-    problems/
-    settings/
-  lib/
-  pages/
-  styles/
-  types/
+```
+Activity (fact) → Evidence (skill-scoped, with confidence)
+                → Skill mastery (projection) → Readiness per role archetype (projection)
 ```
 
-## Prerequisites
+Key principles we protect:
 
-Before running the app, make sure you have:
+- No single readiness score. Readiness is always student × target role × company archetype.
+- Facts vs projections. Immutable facts are never edited; projections are recomputable.
+- Multi-tenant. A college is a tenant; global content (skills, problems) is shared.
+- Explainable. Every recommendation and score references the evidence behind it.
 
-- Node.js 18+ installed
-- npm or yarn installed
+## Repository layout
 
-## Installation
+This is a pnpm monorepo:
 
-1. Clone the repository
-```bash
-git clone <repository-url>
-cd learnlytica
-```
+| Package | Stack | Purpose |
+| ----------- | ---------------------------- | --------------------------------------------------- |
+| shared/ | TypeScript | Enums and API contracts shared by frontend + backend |
+| backend/ | NestJS + Prisma + PostgreSQL | Domain-modular API and the readiness engine |
+| frontend/ | React + Vite + TypeScript | Feature-modular student / mentor / college surfaces |
 
-2. Install dependencies
-```bash
-npm install
-```
+Each package has its own README.md describing local conventions.
 
-3. Start the development server
-```bash
-npm run dev
-```
-
-4. Open the app in your browser at:
-```text
-http://localhost:5173
-```
-
-## Available Scripts
+## Getting started
 
 ```bash
-npm run dev
-```
-Starts the Vite development server.
+# Requires Node 20+ and pnpm 9+
+pnpm install
 
-```bash
-npm run build
-```
-Runs TypeScript compilation and production build.
+# Backend (see backend/README.md for DB setup)
+pnpm --filter @learnlytica/backend dev
 
-```bash
-npm run preview
-```
-Previews the production build locally.
-
-## Environment Configuration
-
-This app may use environment variables for OAuth and external integrations such as Google login.
-
-Create a `.env` file in the root directory and add values like:
-
-```env
-VITE_GOOGLE_CLIENT_ID=your_google_client_id
-VITE_GITHUB_CLIENT_ID=your_github_client_id
-VITE_LINKEDIN_CLIENT_ID=your_linkedin_client_id
+# Frontend
+pnpm --filter @learnlytica/frontend dev
 ```
 
-> Keep any secret keys server-side and do not expose them in client-side code.
+## Conventions (read before adding code)
 
-## Typical User Flow
-
-1. Sign in or access the student portal
-2. Complete onboarding steps
-3. Explore the dashboard and personalized recommendations
-4. Continue learning via the learning path and practice modules
-5. Track performance through analytics and streaks
-6. Review notifications and schedule upcoming tasks
-7. Manage profile settings and connected accounts
-
-## Notes
-
-- The app currently uses mock/local data for some student profile and analytics behaviors.
-- Some flows are designed to be extended with a backend or real authentication provider integration.
-- The UI is highly modular and suitable for adding more student learning workflows.
-
-## License
-
-This project is currently unlicensed unless specified otherwise.
-
-## Author
-
-C2C Portal / Learnlytica
+- One folder per domain on the backend and one folder per feature on the frontend. Mirror
+the names so a concept is easy to find on both sides.
+- Consistent internal layout. Backend modules always use controllers / services /
+  repositories / dto / entities. Frontend features always use api / components / hooks /
+  pages / types.
+- Shared types live in shared/. Do not redeclare enums or DTOs in both apps.
+- Keep functions small and named for intent. Prefer readability over cleverness — this codebase
+  is meant to be maintained by people, not only by AI.

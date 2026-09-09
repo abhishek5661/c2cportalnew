@@ -171,6 +171,26 @@ export function LoginPage() {
     }, 500)
   }
 
+  const hasCompletedOnboarding = () => {
+    try {
+      const raw = localStorage.getItem('c2cedge.onboarding')
+      if (!raw) return false
+      const onboarding = JSON.parse(raw)
+      if (!onboarding) return false
+      const requiredFields = [
+        onboarding.year,
+        onboarding.interests?.length,
+        onboarding.level,
+        onboarding.goals?.length,
+        onboarding.learningModes?.length,
+        onboarding.preferredTime,
+      ]
+      return requiredFields.every(Boolean)
+    } catch {
+      return false
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setAuthError(null)
@@ -209,9 +229,10 @@ export function LoginPage() {
           return
         }
 
-        setAuthSuccess(`✓ Verified! Welcome back, ${result.user?.name}. Starting onboarding...`)
+        const nextRoute = hasCompletedOnboarding() ? '/dashboard' : '/onboarding/year'
+        setAuthSuccess(`✓ Verified! Welcome back, ${result.user?.name}.`)
         setTimeout(() => {
-          navigate('/onboarding/year')
+          navigate(nextRoute)
         }, 600)
       } else {
         // User is signing up with new credentials
@@ -236,9 +257,10 @@ export function LoginPage() {
           return
         }
 
-        setAuthSuccess(`✓ Account successfully created for ${regResult.user?.name}! Proceeding to onboarding...`)
+        const nextRoute = hasCompletedOnboarding() ? '/dashboard' : '/onboarding/year'
+        setAuthSuccess(`✓ Account successfully created for ${regResult.user?.name}!`)
         setTimeout(() => {
-          navigate('/onboarding/year')
+          navigate(nextRoute)
         }, 600)
       }
     }, 500)
@@ -247,10 +269,11 @@ export function LoginPage() {
   const handleSocialAuth = (providerName?: string | React.MouseEvent) => {
     const provider = typeof providerName === 'string' ? providerName : 'Google'
     const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+    const microsoftClientId = import.meta.env.VITE_MICROSOFT_CLIENT_ID
 
     if (provider === 'Google') {
       if (googleClientId) {
-        const redirectUri = 'http://localhost:5174/login'
+        const redirectUri = `${window.location.origin}/login`
         const googleAuthUrl =
           `https://accounts.google.com/o/oauth2/v2/auth?` +
           `client_id=${googleClientId}` +
@@ -264,6 +287,28 @@ export function LoginPage() {
 
       setShowSocialModal(null)
       setAuthError('Google sign-in is not configured yet. Add VITE_GOOGLE_CLIENT_ID to enable the browser Google chooser.')
+      return
+    }
+
+    if (provider === 'Microsoft') {
+      if (microsoftClientId) {
+        const redirectUri = `${window.location.origin}/login`
+        const microsoftAuthUrl =
+          'https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?' +
+          `client_id=${encodeURIComponent(microsoftClientId)}` +
+          '&response_type=code' +
+          `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+          '&response_mode=query' +
+          `&scope=${encodeURIComponent('openid profile email User.Read offline_access')}` +
+          '&prompt=select_account'
+        window.location.href = microsoftAuthUrl
+        return
+      }
+
+      setCustomSocialEmail('')
+      setCustomSocialName('')
+      setShowSocialModal('Microsoft')
+      setAuthError('Microsoft sign-in is not configured yet. Add VITE_MICROSOFT_CLIENT_ID to open the real Microsoft login page.')
       return
     }
 
@@ -314,14 +359,22 @@ export function LoginPage() {
         localStorage.setItem('c2cedge.onboarding', JSON.stringify(ob))
       } catch {}
 
-      setAuthSuccess(`✓ Authenticated with ${provider} as ${matchedUser.name}! Starting onboarding...`)
+      const nextRoute = hasCompletedOnboarding() ? '/dashboard' : '/onboarding/year'
+      setAuthSuccess(`✓ Authenticated with ${provider} as ${matchedUser.name}!`)
       setTimeout(() => {
-        navigate('/onboarding/year')
+        navigate(nextRoute)
       }, 500)
     }, 400)
   }
 
   useEffect(() => {
+    const session = localStorage.getItem('c2cedge.current_session')
+    const isMember = localStorage.getItem('c2cedge.isMember') === 'true'
+    if (session && isMember && hasCompletedOnboarding()) {
+      navigate('/dashboard', { replace: true })
+      return
+    }
+
     // Handle redirect response from Google OAuth if token is present in hash
     const hash = window.location.hash
     if (hash && hash.includes('access_token=')) {
@@ -769,7 +822,7 @@ export function LoginPage() {
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
-                onClick={handleSocialAuth}
+                onClick={() => handleSocialAuth('Google')}
                 className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-line p-2.5 text-[11px] font-semibold text-ink hover:bg-slate-50 transition-colors shadow-2xs"
               >
                 <GoogleIcon />
@@ -778,7 +831,7 @@ export function LoginPage() {
 
               <button
                 type="button"
-                onClick={handleSocialAuth}
+                onClick={() => handleSocialAuth('Microsoft')}
                 className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-line p-2.5 text-[11px] font-semibold text-ink hover:bg-slate-50 transition-colors shadow-2xs"
               >
                 <MicrosoftIcon />
@@ -787,7 +840,7 @@ export function LoginPage() {
 
               <button
                 type="button"
-                onClick={handleSocialAuth}
+                onClick={() => handleSocialAuth('GitHub')}
                 className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-line p-2.5 text-[11px] font-semibold text-ink hover:bg-slate-50 transition-colors shadow-2xs"
               >
                 <GitHubIcon />
