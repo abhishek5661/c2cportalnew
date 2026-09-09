@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-navy-950: #071633;
+    --color-navy-900: #0d2148;
+    --color-blue-600: #1747ff;
+    --color-blue-500: #3564ff;
+    --color-blue-100: #eaf0ff;
+    --color-purple-500: #7655f5;
+    --color-green-500: #20a86b;
+    --color-orange-500: #f28a24;
+    --color-red-500: #e5484d;
+    --color-cyan-500: #159bb3;
+    --color-surface: #ffffff;
+    --color-surface-subtle: #f7f9ff;
+    --color-border: #dfe6f4;
+    --color-text: #101d3c;
+    --color-text-muted: #63708d;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-surface-subtle font-sans text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-600 ring-offset-2 ring-offset-white;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-card border border-line bg-surface shadow-card;
+  }
+
+  .section-title {
+    @apply font-display text-base font-semibold text-ink;
+  }
+}
